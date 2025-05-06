@@ -53,7 +53,6 @@ fun SplashScreen(navHostController: NavHostController) {
 
 
 
-
     }
 
     Column(
