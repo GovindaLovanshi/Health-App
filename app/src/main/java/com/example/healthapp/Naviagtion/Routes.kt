@@ -31,4 +31,10 @@ sealed class Routes {
 
     @Serializable
     data object Intro:Routes()
+
+    @Serializable
+    data object DoctorForm:Routes()
+
+    @Serializable
+    data object BloodForm:Routes()
 }

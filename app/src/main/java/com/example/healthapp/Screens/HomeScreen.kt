@@ -138,8 +138,8 @@ fun HomeScreen(navHostController: NavHostController) {
                                     when(index){
 
                                         0 -> {navHostController.navigate(Routes.HomeScreen)}
-                                        1 -> {navHostController.navigate(Routes.DoctorList)}
-                                        2 -> {navHostController.navigate(Routes.DonaterList)}
+                                        1 -> {navHostController.navigate(Routes.DonaterList)}
+                                        2 -> {navHostController.navigate(Routes.DoctorList)}
                                         3 -> {navHostController.navigate(Routes.Setting)}
                                     }
 

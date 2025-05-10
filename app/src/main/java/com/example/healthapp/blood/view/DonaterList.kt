@@ -36,11 +36,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
+import okhttp3.Route
 
-@Preview
+
 @Composable
-fun DonaterList(){
+fun DonaterList(navHostController: NavHostController){
 
 
     Scaffold(
@@ -48,7 +51,7 @@ fun DonaterList(){
 
             FloatingActionButton(
                 onClick = {
-
+                    navHostController.navigate(Routes.BloodForm)
 
                 },
                 modifier = Modifier.size(65.dp),
@@ -59,49 +62,21 @@ fun DonaterList(){
                     contentDescription = null,
                     modifier = Modifier.size(28.dp))
             }
+        },
+        topBar = {
+           TopBarBlood()
         }
-    ) {
-
-        Column(modifier = Modifier.padding(it)) {
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Box(modifier = Modifier.fillMaxWidth()) {
-
-                Text(
-                    text = "Job Section",
-                    fontSize = 28.sp,
-                    color = colorResource(id = R.color.green),
-                    modifier = Modifier.align(Alignment.CenterStart)
-                        .padding(start = 16.dp), fontWeight = FontWeight.Bold
-                )
-
-
-                Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+    ) {padding->
 
 
 
-                    IconButton(onClick = {}) {
-
-                        Icon(
-                            painter = painterResource(id = R.drawable.back),
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-
-                }
 
 
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn {
+        LazyColumn(modifier = Modifier.padding(padding)) {
 
            item {
                Donate()
+
            }
         }
     }
@@ -145,6 +120,7 @@ fun Donate(
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
+
                 Text(
                     text = "Name",
                     color = Color.Black,
@@ -152,6 +128,8 @@ fun Donate(
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
+
+                Spacer(modifier = Modifier.width(12.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
@@ -168,21 +146,7 @@ fun Donate(
                     )
                 }
 
-                Text(
-                    text = "8269113752", // Consider passing this as a parameter
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1
-                )
 
-                Text(
-                    text = "15-05-25", // Also consider passing this dynamically
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1
-                )
             }
         }
     }
@@ -212,7 +176,7 @@ fun TopBarBlood (){
                     .clickable { })
 
             Text(
-                text = " Job Details",
+                text = " Blood Details",
                 fontSize = 20.sp,
                 color = Color.White,
                 modifier = Modifier

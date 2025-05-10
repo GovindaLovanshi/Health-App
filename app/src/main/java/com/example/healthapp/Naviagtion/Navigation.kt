@@ -5,12 +5,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.healthapp.Authentication.view.RegistrationScreen
+import com.example.healthapp.Doctor.form.DoctorForm
 import com.example.healthapp.Doctor.view.DoctorList
 import com.example.healthapp.Screens.HomeScreen
 import com.example.healthapp.Screens.Intro
 import com.example.healthapp.Screens.Profile
 import com.example.healthapp.Screens.Setting
 import com.example.healthapp.Screens.SplashScreen
+import com.example.healthapp.blood.form.BloodForm
 import com.example.healthapp.blood.view.DonaterList
 
 
@@ -38,11 +40,11 @@ fun Navigation(){
         }
 
         composable<Routes.DonaterList> {
-            DonaterList()
+            DonaterList(navController)
 
         }
         composable<Routes.DoctorList> {
-            DoctorList()
+            DoctorList(navController)
 
         }
 
@@ -52,6 +54,14 @@ fun Navigation(){
 
         composable<Routes.Setting>{
             Setting()
+        }
+
+        composable<Routes.BloodForm>{
+            BloodForm()
+        }
+
+        composable<Routes.DoctorForm>{
+            DoctorForm()
         }
 
         composable<Routes.Intro>{
