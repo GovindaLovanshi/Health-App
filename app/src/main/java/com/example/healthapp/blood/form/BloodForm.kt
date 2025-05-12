@@ -1,5 +1,9 @@
 package com.example.healthapp.blood.form
 
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,19 +38,39 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
+import com.example.healthapp.blood.model.BloodDetails
 import com.example.healthapp.blood.view.TopBarBlood
+import com.example.healthapp.blood.viewmodel.BloodDonaterViewModel
 
 @Preview
 @Composable
 fun BloodForm() {
+
+    val viewModel : BloodDonaterViewModel = viewModel()
+
+    val context = LocalContext.current
+    var name by remember { mutableStateOf("") }
+    var DOB by remember { mutableStateOf("") }
+    var mobile by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var blood by remember { mutableStateOf("") }
+
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        viewModel.image = uri
+    }
 
     Scaffold(
 
@@ -66,11 +90,7 @@ fun BloodForm() {
         )
         {
 
-            var name by remember { mutableStateOf("") }
-            var DOB by remember { mutableStateOf("") }
-            var mobile by remember { mutableStateOf("") }
-            var address by remember { mutableStateOf("") }
-            var blood by remember { mutableStateOf("") }
+
 
             Column(
                 modifier = Modifier
@@ -81,6 +101,20 @@ fun BloodForm() {
             ) {
 
 
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                Button(onClick = {
+                    imageLauncher.launch("image/*")
+
+                }) {
+                    Text("Select Image")
+                }
+
+
+                viewModel.image?.let { uri ->
+                    AsyncImage(model = uri, contentDescription = null, modifier = Modifier.size(100.dp))
+                }
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
@@ -218,7 +252,27 @@ fun BloodForm() {
 
                 Button(
                     modifier = Modifier.width(250.dp),
-                    onClick = { /* TODO: Implement click action */ },
+                    onClick = {
+                        val bloodFormData = BloodDetails(
+                            name = name,
+                            address = address,
+                            mobile = mobile,
+                            dob = DOB,
+                            group = blood
+
+
+                        )
+                        viewModel.uploadDataWithImage(
+                            bloodFormData,
+                            onSuccess = {
+                                Toast.makeText(context, "Data saved", Toast.LENGTH_SHORT).show()
+                                name = ""; blood = ""; mobile = ""; address = ""; DOB = ""
+                            },
+                            onFailure = { msg ->
+                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))
                 ) {

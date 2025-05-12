@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.healthapp.Authentication.ViewModel.MobileAuthViewModel
+import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -50,7 +51,7 @@ import okhttp3.Route
 
 
 @Composable
-fun Profile( ){
+fun Profile(navHostController: NavHostController ){
 
     val phoneAuthViewModel: MobileAuthViewModel = viewModel()
     var name by remember {
@@ -157,7 +158,7 @@ fun Profile( ){
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(onClick = {
-//            navHostController.navigate(Routes.HomeScreen)
+            navHostController.navigate(Routes.HomeScreen)
         },
             colors = ButtonDefaults.buttonColors(colorResource(R.color.teal_700))
         ) {

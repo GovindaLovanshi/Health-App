@@ -1,5 +1,8 @@
 package com.example.healthapp.Doctor.form
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,26 +39,50 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberImagePainter
+import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
 import com.example.healthapp.R
 import com.example.healthapp.blood.form.TopBarBloodForm
+import android.net.Uri
+
+
 
 
 @Preview
 @Composable
 fun DoctorForm() {
+    val viewModel : DoctorViewModel = viewModel()
+
+    val context = LocalContext.current
+    val formList by viewModel.formState
+    val loading by viewModel.loading
+
+    var name by remember { mutableStateOf("") }
+    var date by remember { mutableStateOf("") }
+    var mobile by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var designation by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var imageUri by remember {  mutableStateOf<Uri?>(null) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri -> imageUri = uri }
+    )
     Scaffold(
 
         topBar = {
 
 
-            TopBarBloodForm()
+            TopBarDoctorForm()
 
         }
     ) { padding ->
@@ -68,11 +95,7 @@ fun DoctorForm() {
         )
         {
 
-            var name by remember { mutableStateOf("") }
-            var DOB by remember { mutableStateOf("") }
-            var mobile by remember { mutableStateOf("") }
-            var address by remember { mutableStateOf("") }
-            var blood by remember { mutableStateOf("") }
+
 
             Column(
                 modifier = Modifier
@@ -86,6 +109,15 @@ fun DoctorForm() {
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
+                Button(onClick = { launcher.launch("image/*") }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    Text("Select Image")
+                }
+
+                imageUri?.let {
+                    Image(painter = rememberImagePainter(it), contentDescription = null, modifier = Modifier.fillMaxWidth().height(100.dp).padding(vertical = 8.dp))
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
 
 
                 TextField(
@@ -106,15 +138,16 @@ fun DoctorForm() {
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
+
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
 
                     TextField(
                         modifier = Modifier.width(170.dp),
-                        value = DOB,
+                        value = date,
 
 
-                        onValueChange = { DOB = it },
+                        onValueChange = { date = it },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
@@ -123,7 +156,7 @@ fun DoctorForm() {
                             cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
                             unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
                         ),
-                        placeholder = { Text(text = "Date Of Birth") }
+                        placeholder = { Text(text = "Enter Date") }
 
                     )
 
@@ -131,8 +164,8 @@ fun DoctorForm() {
 
                     TextField(
                         modifier = Modifier.width(170.dp),
-                        value = blood,
-                        onValueChange = { blood = it },
+                        value = designation,
+                        onValueChange = { designation = it },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
@@ -141,7 +174,7 @@ fun DoctorForm() {
                             cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
                             unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
                         ),
-                        placeholder = { Text(text = "Blood Group") }
+                        placeholder = { Text(text = "Designation") }
 
                     )
 
@@ -216,11 +249,37 @@ fun DoctorForm() {
 
                 }
 
-                Spacer(modifier = Modifier.padding(120.dp))
+                Spacer(modifier = Modifier.padding(20.dp))
+
+
+
+                TextField(
+                    modifier = Modifier.width(350.dp).height(200.dp),
+                    value = description,
+                    onValueChange = { description = it },
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                        unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                    ),
+                    placeholder = { Text(text = "About Of Doctor") }
+
+                )
+
+                Spacer(modifier = Modifier.padding(10.dp))
 
                 Button(
                     modifier = Modifier.width(250.dp),
-                    onClick = { /* TODO: Implement click action */ },
+                    onClick = {
+                        viewModel.submitForm(
+                            name,designation,address,mobile,designation,date, imageUri,
+                            onSuccess = { Toast.makeText(context, "Form submitted successfully", Toast.LENGTH_SHORT).show() },
+                            onFailure = { e -> Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show() }
+                        )
+                    },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))
                 ) {
@@ -263,7 +322,7 @@ fun TopBarDoctorForm() {
                     .clickable { })
 
             Text(
-                text = " Blood Form",
+                text = " Doctor Form",
                 fontSize = 20.sp,
                 color = Color.White,
                 modifier = Modifier

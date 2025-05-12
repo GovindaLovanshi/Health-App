@@ -23,11 +23,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import androidx.navigation.navArgument
+import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
 
-@Preview
+
 @Composable
-fun Setting(){
+fun Setting(navHostController: NavHostController){
 
     Column(
         Modifier
@@ -211,7 +214,7 @@ fun Setting(){
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.clickable {
-
+                        navHostController.navigate(Routes.Intro)
 
                     }
                 )

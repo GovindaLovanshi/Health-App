@@ -36,7 +36,7 @@ fun Navigation(){
 
         composable<Routes.Profile> {
 
-            Profile()
+            Profile(navController)
         }
 
         composable<Routes.DonaterList> {
@@ -53,7 +53,7 @@ fun Navigation(){
         }
 
         composable<Routes.Setting>{
-            Setting()
+            Setting(navController)
         }
 
         composable<Routes.BloodForm>{
@@ -67,6 +67,8 @@ fun Navigation(){
         composable<Routes.Intro>{
             Intro(navController)
         }
+
+
 
 
     }

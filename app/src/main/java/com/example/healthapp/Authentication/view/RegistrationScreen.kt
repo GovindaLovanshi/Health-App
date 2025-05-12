@@ -48,6 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.healthapp.Authentication.ViewModel.AuthState
 import com.example.healthapp.Authentication.ViewModel.MobileAuthViewModel
+import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
 
 
@@ -269,11 +270,11 @@ fun RegistrationScreen(navController: NavHostController){
 
                 phoneAuthViewModel.resetAuthState()
 
-//                navController.navigate(Routes.HomeScreen){
-//                    popUpTo<Routes.RegistrationScreen>{
-//                        inclusive = true
-//                    }
-//                }
+                navController.navigate(Routes.Profile){
+                    popUpTo<Routes.RegistrationScreen>{
+                        inclusive = true
+                    }
+                }
             }
             is AuthState.Error -> {
 

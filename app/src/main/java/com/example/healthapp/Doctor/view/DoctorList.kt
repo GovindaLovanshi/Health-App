@@ -1,17 +1,23 @@
 package com.example.healthapp.Doctor.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
@@ -25,17 +31,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
+import com.example.healthapp.model.Items
 
 
 @Composable
@@ -60,6 +71,9 @@ fun DoctorList(navHostController: NavHostController){
                     contentDescription = null,
                     modifier = Modifier.size(28.dp))
             }
+        },
+        topBar = {
+            TopBarDoctor()
         }
     ) {padding ->
 
@@ -67,9 +81,13 @@ fun DoctorList(navHostController: NavHostController){
         LazyColumn (modifier = Modifier.padding(padding)){
 
             item {
-                ItemList()
+                CardOfDr()
+                CardOfDr()
+                CardOfDr()
             }
         }
+
+
 
 
 
@@ -78,22 +96,29 @@ fun DoctorList(navHostController: NavHostController){
 
 @Preview
 @Composable
-fun ItemList() {
+fun CardOfDr(
 
-    Card(
+) {
+    val context = LocalContext.current
+
+    androidx.compose.material.Card(
         modifier = Modifier
+            .padding(8.dp)
             .fillMaxWidth()
-            .height(200.dp)
-            .padding(8.dp),
-        shape = RoundedCornerShape(12.dp),
+            .clickable {
 
-        ) {
+            },
+        shape = RoundedCornerShape(12.dp),
+        elevation = 6.dp
+
+    ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Image(
-                painter = painterResource(id = R.drawable.cartoon),
+                painter = painterResource(R.drawable.cartoon),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
@@ -101,85 +126,30 @@ fun ItemList() {
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(12.dp)) // Changed from height to width (for horizontal spacing)
 
             Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
+
                 Text(
-                    text = "Doctor Name",
+                    text = "Name",
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(R.drawable.location),
-                        contentDescription = null
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
                     )
-                    Text(
-                        text = "Clinic Address",
-                        color = Color.Black,
-                        fontSize = 12.sp,
-                        maxLines = 1,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-
-            }
-//            Column(
-//                modifier = Modifier.weight(1f),
-//                verticalArrangement = Arrangement.spacedBy(12.dp)
-//            ) {
-//                Text(
-//                    text = "Quantity",
-//                    color = Color.Black,
-//                    fontSize = 14.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    maxLines = 1
-//                )
-//                Row(verticalAlignment = Alignment.CenterVertically) {
-//
-//                    Text(
-//                        text = "Rate",
-//                        color = Color.Black,
-//                        fontSize = 12.sp,
-//                        maxLines = 1,
-//                        modifier = Modifier.padding(start = 4.dp)
-//                    )
-//                }
-//
-//            }
-        }
-
-        HorizontalDivider()
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(painter = painterResource(R.drawable.homed),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(60.dp).
-                    padding(start = 12.dp)
-                    .clip(CircleShape),
-
-                )
-
-            Spacer(modifier = Modifier.width(15.dp))
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    text = "Seller Name",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
                     Text(
                         text = "Address",
                         color = Color.Black,
@@ -189,21 +159,57 @@ fun ItemList() {
                     )
                 }
 
-            }
-            Row{
-
-                Image(painter = painterResource(R.drawable.bluecall),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-
+                Text(
+                    text ="Dentist",
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
                 )
+
+
             }
         }
-
-
-
-
     }
-
 }
+
+@Preview
+@Composable
+fun TopBarDoctor (){
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(75.dp)
+            .background(color = colorResource(R.color.teal_700))
+    ) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(painter = painterResource(R.drawable.back),
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable { })
+
+            Text(
+                text = " Doctor,s List",
+                fontSize = 20.sp,
+                color = Color.White,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                fontWeight = FontWeight.Bold
+            )
+            Image(painter = painterResource(R.drawable.back)
+                , contentDescription = null)
+        }
+    }
+}
+
+
+
 

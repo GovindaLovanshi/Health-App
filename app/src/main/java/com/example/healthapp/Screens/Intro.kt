@@ -40,13 +40,13 @@ fun Intro(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.green_dark))
+            .background(colorResource(R.color.darkGreen))
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.intro),
+            painter = painterResource(R.drawable.icon),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 48.dp)
