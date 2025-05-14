@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
@@ -53,9 +54,9 @@ import com.example.healthapp.blood.model.BloodDetails
 import com.example.healthapp.blood.view.TopBarBlood
 import com.example.healthapp.blood.viewmodel.BloodDonaterViewModel
 
-@Preview
+
 @Composable
-fun BloodForm() {
+fun BloodForm(navHostController: NavHostController) {
 
     val viewModel : BloodDonaterViewModel = viewModel()
 
@@ -266,7 +267,9 @@ fun BloodForm() {
                             bloodFormData,
                             onSuccess = {
                                 Toast.makeText(context, "Data saved", Toast.LENGTH_SHORT).show()
+
                                 name = ""; blood = ""; mobile = ""; address = ""; DOB = ""
+                                navHostController.navigate(Routes.DonaterList)
                             },
                             onFailure = { msg ->
                                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()

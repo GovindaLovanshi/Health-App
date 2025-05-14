@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import com.example.healthapp.Naviagtion.Navigation
 import com.example.healthapp.ui.theme.HealthAppTheme
 
@@ -26,6 +27,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+//
+//val chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
+//nnerPadding ->
+
 
 //@Composable
 //fun Greeting(name: String, modifier: Modifier = Modifier) {

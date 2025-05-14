@@ -52,13 +52,12 @@ import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
 import com.example.healthapp.R
 import com.example.healthapp.blood.form.TopBarBloodForm
 import android.net.Uri
+import androidx.navigation.NavHostController
+import com.example.healthapp.Naviagtion.Routes
 
 
-
-
-@Preview
 @Composable
-fun DoctorForm() {
+fun DoctorForm(navHostController: NavHostController) {
     val viewModel : DoctorViewModel = viewModel()
 
     val context = LocalContext.current
@@ -276,10 +275,13 @@ fun DoctorForm() {
                     onClick = {
                         viewModel.submitForm(
                             name,designation,address,mobile,designation,date, imageUri,
-                            onSuccess = { Toast.makeText(context, "Form submitted successfully", Toast.LENGTH_SHORT).show() },
+                            onSuccess = { Toast.makeText(context, "Form submitted successfully", Toast.LENGTH_SHORT).show()
+                                navHostController.navigate(Routes.DoctorList)
+                                },
                             onFailure = { e -> Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show() }
                         )
                     },
+
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))
                 ) {

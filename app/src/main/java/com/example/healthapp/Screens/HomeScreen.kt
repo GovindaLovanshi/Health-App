@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -37,6 +38,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -95,10 +97,23 @@ fun HomeScreen(navHostController: NavHostController) {
 
 
     Scaffold(
+        floatingActionButton = {
+
+            FloatingActionButton(
+                onClick = {
+                    navHostController.navigate(Routes.ChatActivity)
+
+                },
+                modifier = Modifier.size(65.dp),
+                contentColor = Color.White,
+            ) {
+
+                Icon(painter = painterResource(id = R.drawable.btn_1),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp))
+            }
+        },
         topBar = {
-
-
-
 
 
         },
@@ -194,9 +209,9 @@ fun HomeScreen(navHostController: NavHostController) {
                NameAndProfile()
            }
 
-            item {
-                Search()
-            }
+//            item {
+//                Search()
+//            }
 
 
            item{

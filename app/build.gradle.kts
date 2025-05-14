@@ -97,6 +97,8 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil:2.4.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.4.0")
+    implementation ("androidx.compose.ui:ui:1.5.1")
 
 
 }

@@ -37,4 +37,7 @@ sealed class Routes {
 
     @Serializable
     data object BloodForm:Routes()
+
+    @Serializable
+    data object ChatActivity:Routes()
 }

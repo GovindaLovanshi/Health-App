@@ -22,6 +22,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -148,6 +150,125 @@ fun DonaterList(navHostController: NavHostController){
     }
 
 }
+
+@Preview
+@Composable
+fun ItemList() {
+
+    androidx.compose.material3.Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .shadow(elevation = 4.dp)
+            .background(color = colorResource(id = R.color.teal_700))
+            .padding(8.dp),
+        shape = RoundedCornerShape(12.dp),
+
+
+        ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.cartoon),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Gaju Singh",
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+
+                Text(
+                    text = "12 December 2000",
+                    color = Color.Black,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(R.drawable.location),
+                        contentDescription = null
+                    )
+                    Text(
+                        text = "Indore",
+                        color = Color.Black,
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
+            }
+
+        }
+
+        HorizontalDivider()
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Image(
+//                painter = painterResource(R.drawable.homed),
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .size(60.dp).padding(start = 12.dp)
+//                    .clip(CircleShape),
+//
+//                )
+
+            Spacer(modifier = Modifier.width(15.dp))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Blood Group  Name",
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                    Text(
+                        text = "+91 12345678",
+                        color = Color.Black,
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
+            }
+            Row {
+
+                Image(
+                    painter = painterResource(R.drawable.bluecall),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+
+                )
+            }
+        }
+
+
+    }
+
+}
 //@Preview
 //@Composable
 //fun Donate(
@@ -241,10 +362,7 @@ fun TopBarBlood (){
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(painter = painterResource(R.drawable.back),
-                contentDescription = null,
-                modifier = Modifier
-                    .clickable { })
+
 
             Text(
                 text = " Blood Details",
@@ -255,8 +373,7 @@ fun TopBarBlood (){
                     .padding(horizontal = 16.dp),
                 fontWeight = FontWeight.Bold
             )
-            Image(painter = painterResource(R.drawable.back)
-                , contentDescription = null)
+
         }
     }
 }
