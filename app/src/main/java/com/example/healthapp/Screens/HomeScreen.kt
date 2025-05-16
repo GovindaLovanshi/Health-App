@@ -240,7 +240,7 @@ fun HomeScreen(navHostController: NavHostController) {
                                end.linkTo(parent.end)
                            }
                    )
-                   Text(text = "Advanced Blood \nFacility in This Plateform",
+                   Text(text = "Advanced Human Test \nFacility in This Plateform",
                        fontSize = 18.sp,
                        fontWeight = FontWeight.Bold,
                        color = Color.White,
@@ -262,7 +262,7 @@ fun HomeScreen(navHostController: NavHostController) {
                                bottom.linkTo(parent.bottom)
                            }
                            .clickable {
-                               navHostController.navigate(Routes.DonaterList)
+                               navHostController.navigate(Routes.LabTestScreen)
                            }
 
                            .background(

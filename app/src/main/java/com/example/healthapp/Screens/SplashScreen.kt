@@ -58,7 +58,7 @@ fun SplashScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.green_dark))
+            .background(colorResource(R.color.lightBlue))
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -66,7 +66,7 @@ fun SplashScreen(navHostController: NavHostController) {
 
         Spacer(modifier = Modifier.height(330.dp))
         Image(
-           painter = painterResource(id = R.drawable.intro),
+           painter = painterResource(id = R.drawable.fav_icon),
             contentDescription = null,
             modifier = Modifier
                 .clip(CircleShape).width(150.dp).height(150.dp)

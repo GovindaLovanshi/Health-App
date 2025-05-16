@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.identity.jvm)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

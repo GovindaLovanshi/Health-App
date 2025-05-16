@@ -8,7 +8,7 @@ data class BloodDetails(
     var mobile:String = "",
     var name:String = "",
     var dob: String = "",
-    var group: String = "",
+    var blood: String = "",
     var image:String = "",
 
 )

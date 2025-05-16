@@ -1,84 +1,104 @@
 package com.example.healthapp.blood.viewmodel
 
 
-import androidx.annotation.OptIn
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.media3.common.util.Log
-import androidx.media3.common.util.UnstableApi
+
+
 
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 
 import com.android.identity.util.UUID
 import com.example.healthapp.blood.model.BloodDetails
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class BloodDonaterViewModel :ViewModel(){
 
-    private val dbRef = FirebaseDatabase.getInstance().getReference("bloodForms")
-    private val storageRef = FirebaseStorage.getInstance().reference.child("userImages")
 
-    var bloodDetails by mutableStateOf<List<BloodDetails>>(emptyList())
-        private set
 
-    var image by mutableStateOf<Uri?>(null)
 
-    fun uploadDataWithImage(
-        formData: BloodDetails,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val imageUri = this.image
-        if (imageUri == null) {
-            onFailure("Image not selected")
-            return
-        }
 
-        val fileName = UUID.randomUUID().toString() + ".jpg"
-        val imageRef = storageRef.child(fileName)
+        private val db = FirebaseFirestore.getInstance()
+        private val storage = FirebaseStorage.getInstance()
+        private val _donors = MutableStateFlow<List<BloodDetails>>(emptyList())
+        val donors: StateFlow<List<BloodDetails>> = _donors
 
-        imageRef.putFile(imageUri).addOnSuccessListener {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                val id = dbRef.push().key ?: UUID.randomUUID().toString()
-                val dataWithId = formData.copy(id = id, image = uri.toString())
-
-                dbRef.child(id).setValue(dataWithId)
-                    .addOnSuccessListener { onSuccess() }
-                    .addOnFailureListener { onFailure(it.message ?: "Error saving data") }
-            }
-        }.addOnFailureListener {
-            onFailure(it.message ?: "Image upload failed")
-        }
-    }
-
-    fun fetchUserData() {
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val tempList = mutableListOf<BloodDetails>()
-                for (child in snapshot.children) {
-                    child.getValue(BloodDetails::class.java)?.let {
-                        tempList.add(it)
-                    }
+        // 🔹 Add/Submit data
+        fun submitDonorData(
+            name: String,
+            dob: String,
+            blood: String,
+            address: String,
+            mobile: String,
+            imageUri: Uri?,
+            onSuccess: () -> Unit,
+            onFailure: (Exception) -> Unit
+        ) {
+            viewModelScope.launch {
+                if (imageUri != null) {
+                    val imageRef = storage.reference.child("blood_donors/${UUID.randomUUID()}.jpg")
+                    imageRef.putFile(imageUri)
+                        .continueWithTask { task ->
+                            if (!task.isSuccessful) {
+                                task.exception?.let { throw it }
+                            }
+                            imageRef.downloadUrl
+                        }
+                        .addOnSuccessListener { uri ->
+                            val donor = BloodDetails(
+                                id = UUID.randomUUID().toString(),
+                                name = name,
+                                dob = dob,
+                                blood = blood,
+                                address = address,
+                                mobile = mobile,
+                                image = uri.toString()
+                            )
+                            db.collection("blood_donors")
+                                .document(donor.id)
+                                .set(donor)
+                                .addOnSuccessListener { onSuccess() }
+                                .addOnFailureListener { e -> onFailure(e) }
+                        }
+                        .addOnFailureListener { e -> onFailure(e) }
+                } else {
+                    onFailure(Exception("Image not selected"))
                 }
-                bloodDetails = tempList
             }
+        }
 
-            @OptIn(UnstableApi::class)
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("FormViewModel", "Database error: ${error.message}")
-            }
-        })
+        // 🔹 Fetch all donors
+        fun fetchDonors() {
+            db.collection("blood_donors")
+                .get()
+                .addOnSuccessListener { result ->
+                    val donorsList = result.mapNotNull { it.toObject(BloodDetails::class.java) }
+                    _donors.value = donorsList
+                }
+        }
+
+        // 🔹 Delete donor
+        fun deleteDonor(id: String, imageUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+            val imageRef = storage.getReferenceFromUrl(imageUrl)
+
+            imageRef.delete().addOnSuccessListener {
+
+                db.collection("blood_donors")
+                    .document(id)
+                    .delete()
+                    .addOnSuccessListener {
+                        _donors.value = _donors.value.filterNot { it.id == id }
+                        onSuccess()
+                    }
+                    .addOnFailureListener { onFailure(it) }
+            }.addOnFailureListener { onFailure(it) }
+        }
     }
 
-    fun deleteUserData(id: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        dbRef.child(id).removeValue()
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onFailure(it.message ?: "Delete failed") }
-    }
-}
+
+

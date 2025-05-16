@@ -43,4 +43,8 @@ sealed class Routes {
 
     @Serializable
     data object LabTestScreen:Routes()
+
+
+    @Serializable
+    data object AppointmentList:Routes()
 }

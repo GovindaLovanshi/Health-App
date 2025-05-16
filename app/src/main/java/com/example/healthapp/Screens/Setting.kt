@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navArgument
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
+import okhttp3.Route
 
 
 @Composable
@@ -183,7 +184,9 @@ fun Setting(navHostController: NavHostController){
                     Modifier
                         .height(25.dp).width(25.dp)
                         .padding(end = 5.dp)
-                        .clickable { })
+                        .clickable {
+                            navHostController.navigate(Routes.AppointmentList)
+                        })
             }
         }
         Row(

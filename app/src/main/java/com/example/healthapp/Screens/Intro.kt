@@ -2,8 +2,10 @@ package com.example.healthapp.Screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,21 +49,24 @@ fun Intro(navHostController: NavHostController) {
         ){
             val (backgroundImge, logoImg,titleTxt,subtitleTxt,buttonBox)=createRefs()
             Image(
-                painter = painterResource(id = R.drawable.background_intro),
+                painter = painterResource(id = R.drawable.icon2),
                 contentDescription = null,
-                modifier = Modifier
+                modifier = Modifier.
+                    clickable{
+                        navHostController.navigate(Routes.HomeScreen)
+                    }
                     .constrainAs(backgroundImge){
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
                     .fillMaxWidth()
-                    .height(700.dp),
+                    .fillMaxHeight(),
                 contentScale = ContentScale.FillBounds
             )
             androidx.compose.material3.Text(
-                text = "Health Guide",
-                fontSize = 60.sp,
+                text = "",
+                fontSize = 0.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xff3d33a8),
                 modifier = Modifier
@@ -82,14 +87,14 @@ fun Intro(navHostController: NavHostController) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                        .width(300.dp)
-                        .height(300.dp)
+                        .width(1.dp)
+                        .height(1.dp)
                 }
                 , contentScale = ContentScale.Fit
             )
             androidx.compose.material3.Text(
-                text = "Health Guide App",
-                fontSize = 30.sp,
+                text = "",
+                fontSize = 0.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xff3d33a8),
                 modifier = Modifier
@@ -101,7 +106,7 @@ fun Intro(navHostController: NavHostController) {
                     }
             )
             Button(onClick={
-                navHostController.navigate(Routes.Profile)
+
             },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -109,8 +114,8 @@ fun Intro(navHostController: NavHostController) {
                 ),
                 modifier = Modifier
                     .padding(top=16.dp)
-                    .fillMaxWidth()
-                    .height(50.dp)
+                    .width(1.dp)
+                    .height(0.dp)
                     .constrainAs(buttonBox){
                         top.linkTo(backgroundImge.bottom)
                         start.linkTo(parent.start)
@@ -119,7 +124,7 @@ fun Intro(navHostController: NavHostController) {
             ) {
                 Text(
                     text = "Let's Get Started",
-                    fontSize = 18.sp,
+                    fontSize = 0.sp,
                     color= Color.White
                 )
             }

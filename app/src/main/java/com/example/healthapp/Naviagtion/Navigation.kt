@@ -19,6 +19,7 @@ import com.example.healthapp.Screens.Intro
 import com.example.healthapp.Screens.Profile
 import com.example.healthapp.Screens.Setting
 import com.example.healthapp.Screens.SplashScreen
+import com.example.healthapp.appointment.view.AppointmentList
 import com.example.healthapp.blood.form.BloodForm
 import com.example.healthapp.blood.view.DonaterList
 import com.example.healthapp.labtest.LabTestScreen
@@ -86,6 +87,11 @@ fun Navigation(){
         composable<Routes.LabTestScreen> {
 
             LabTestScreen()
+        }
+
+        composable<Routes.AppointmentList> {
+
+            AppointmentList()
         }
 
     }
