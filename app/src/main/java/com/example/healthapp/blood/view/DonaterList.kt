@@ -85,65 +85,9 @@ fun DonaterList(navHostController: NavHostController){
 
         LazyColumn(modifier = Modifier.padding(padding)) {
 
-           items(BlodViewModel.bloodDetails){ blood->
-               Card(
-                   modifier = Modifier
-                       .padding(8.dp)
-                       .fillMaxWidth()
-                       .clickable {
-
-                       },
-                   shape = RoundedCornerShape(12.dp),
-                   elevation = 6.dp
-
-               ) {
-                   Row(
-                       modifier = Modifier.padding(12.dp),
-                       verticalAlignment = Alignment.CenterVertically
-                   ) {
-
-                       if (blood.image.isNotEmpty()) {
-                           AsyncImage(model = blood.image, contentDescription = null, modifier = Modifier.size(80.dp).clip(
-                               CircleShape), contentScale = ContentScale.Crop)
-                       }
-
-                       Spacer(modifier = Modifier.width(12.dp)) // Changed from height to width (for horizontal spacing)
-
-                       Column(
-                           modifier = Modifier
-                               .fillMaxWidth(),
-                           verticalArrangement = Arrangement.spacedBy(6.dp)
-                       ) {
-
-                           Text(
-                               text = blood.name,
-                               color = Color.Black,
-                               fontSize = 14.sp,
-                               fontWeight = FontWeight.Bold,
-                               maxLines = 1
-                           )
-
-                           Spacer(modifier = Modifier.width(12.dp))
-
-                           Row(verticalAlignment = Alignment.CenterVertically) {
-                               Image(
-                                   painter = painterResource(R.drawable.location),
-                                   contentDescription = null,
-                                   modifier = Modifier.size(16.dp)
-                               )
-                               Text(
-                                   text = blood.address,
-                                   color = Color.Black,
-                                   fontSize = 12.sp,
-                                   maxLines = 1,
-                                   modifier = Modifier.padding(start = 4.dp)
-                               )
-                           }
-
-
-                       }
-                   }
-               }
+           item{
+               ItemList()
+               ItemList()
 
            }
         }
@@ -160,7 +104,7 @@ fun ItemList() {
             .fillMaxWidth()
             .height(200.dp)
             .shadow(elevation = 4.dp)
-            .background(color = colorResource(id = R.color.teal_700))
+            .background(color = colorResource(id = R.color.lightBlue))
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
 
@@ -171,7 +115,7 @@ fun ItemList() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.cartoon),
+                painter = painterResource(id = R.drawable.profile),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
@@ -267,6 +211,8 @@ fun ItemList() {
 
 
     }
+
+    HorizontalDivider()
 
 }
 //@Preview

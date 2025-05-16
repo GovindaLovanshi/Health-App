@@ -182,11 +182,14 @@ fun DoctorDetailScreen(){
                             maxLines = 1
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {
-
+                            Image(
+                                painter = painterResource(R.drawable.location),
+                                contentDescription = null
+                            )
                             Text(
                                 text = "Indore",
                                 color = Color.Black,
-                                fontSize = 14.sp,
+                                fontSize = 12.sp,
                                 maxLines = 1,
                                 modifier = Modifier.padding(start = 4.dp)
                             )

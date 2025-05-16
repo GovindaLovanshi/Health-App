@@ -47,7 +47,7 @@ fun Setting(navHostController: NavHostController){
             val (topImg, profile, title, back, pen) = createRefs()
 
             Image(
-                painterResource(id = R.drawable.experience), null, Modifier
+                painterResource(id = R.drawable.profile), null, Modifier
                     .fillMaxWidth().height(100.dp)
                     .constrainAs(topImg) {
                         bottom.linkTo(parent.bottom)
@@ -167,7 +167,7 @@ fun Setting(navHostController: NavHostController){
                     .weight(1f)
             ) {
                 Text(
-                    text = "Share",
+                    text = "My Appointments",
                     color = Color.Black,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold

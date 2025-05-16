@@ -118,7 +118,7 @@ fun CardOfDr(
         ) {
 
             Image(
-                painter = painterResource(R.drawable.cartoon),
+                painter = painterResource(R.drawable.doct),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)

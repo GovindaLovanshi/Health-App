@@ -40,4 +40,7 @@ sealed class Routes {
 
     @Serializable
     data object ChatActivity:Routes()
+
+    @Serializable
+    data object LabTestScreen:Routes()
 }

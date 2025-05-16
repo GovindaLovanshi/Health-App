@@ -21,6 +21,7 @@ import com.example.healthapp.Screens.Setting
 import com.example.healthapp.Screens.SplashScreen
 import com.example.healthapp.blood.form.BloodForm
 import com.example.healthapp.blood.view.DonaterList
+import com.example.healthapp.labtest.LabTestScreen
 
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
@@ -80,6 +81,11 @@ fun Navigation(){
         composable <Routes.ChatActivity>{
             ChatPage()
 
+        }
+
+        composable<Routes.LabTestScreen> {
+
+            LabTestScreen()
         }
 
     }

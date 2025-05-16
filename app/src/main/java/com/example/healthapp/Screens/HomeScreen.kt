@@ -32,10 +32,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
@@ -92,7 +95,8 @@ fun HomeScreen(navHostController: NavHostController) {
         BottomNavItem("Home", Icons.Default.Home, unseletedIcon = Icons.Outlined.Home),
         BottomNavItem("Blood", Icons.Default.AddCircle, unseletedIcon = Icons.Outlined.AddCircle),
         BottomNavItem("Doctor", Icons.Default.Person, unseletedIcon = Icons.Outlined.Person),
-        BottomNavItem("Setting", Icons.Default.Person, unseletedIcon = Icons.Outlined.Settings),
+        BottomNavItem("Lab", Icons.Default.MoreVert, unseletedIcon = Icons.Outlined.MoreVert),
+        BottomNavItem("Setting", Icons.Default.Settings, unseletedIcon = Icons.Outlined.Settings),
     )
 
 
@@ -166,7 +170,8 @@ fun HomeScreen(navHostController: NavHostController) {
                                         0 -> {navHostController.navigate(Routes.HomeScreen)}
                                         1 -> {navHostController.navigate(Routes.DonaterList)}
                                         2 -> {navHostController.navigate(Routes.DoctorList)}
-                                        3 -> {navHostController.navigate(Routes.Setting)}
+                                        3 -> {navHostController.navigate(Routes.LabTestScreen)}
+                                        4 -> {navHostController.navigate(Routes.Setting)}
                                     }
 
 
@@ -326,7 +331,7 @@ fun NameAndProfile() {
     ) {
         val (name, order, img) = createRefs()
         Image(
-            painter = painterResource(id = R.drawable.fav_bold), contentDescription = null,
+            painter = painterResource(id = R.drawable.profile), contentDescription = null,
             modifier = Modifier
                 .constrainAs(img) {
                     top.linkTo(parent.top)
@@ -662,7 +667,7 @@ fun TopView(){
 
             }
             Image(
-                painter = painterResource(id = R.drawable.bell_icon),
+                painter = painterResource(id = R.drawable.profile),
                 contentDescription = null,
                 modifier = Modifier
                     .width(80.dp)

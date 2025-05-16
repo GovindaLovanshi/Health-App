@@ -76,7 +76,7 @@ fun MessageList(modifier: Modifier = Modifier, messageList: List<ModelActivity>)
                 contentDescription = "Icon",
                 tint = Pink40,
             )
-            Text(text = "Can You Help Me", fontSize = 22.sp)
+            Text(text = "What Can I Help You.", fontSize = 22.sp)
         }
     } else {
         LazyColumn(

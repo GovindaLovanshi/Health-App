@@ -73,7 +73,7 @@ fun Intro(navHostController: NavHostController) {
                     }
             )
             Image(
-                painter = painterResource(id = R.drawable.icon),
+                painter = painterResource(id = R.drawable.fav_bold),
                 contentDescription = null,
                 modifier = Modifier.run {
                     constrainAs(logoImg){
@@ -101,7 +101,7 @@ fun Intro(navHostController: NavHostController) {
                     }
             )
             Button(onClick={
-                navHostController.navigate(Routes.HomeScreen)
+                navHostController.navigate(Routes.Profile)
             },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -109,7 +109,7 @@ fun Intro(navHostController: NavHostController) {
                 ),
                 modifier = Modifier
                     .padding(top=16.dp)
-                    .width(100.dp)
+                    .fillMaxWidth()
                     .height(50.dp)
                     .constrainAs(buttonBox){
                         top.linkTo(backgroundImge.bottom)
