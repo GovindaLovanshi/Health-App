@@ -1,13 +1,13 @@
 package com.example.healthapp.Doctor.view
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,141 +17,139 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
+import com.example.healthapp.Doctor.model.Doctor
+import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
-import com.example.healthapp.model.Items
+import com.example.healthapp.blood.view.DonorItem
 
 
 @Composable
-fun DoctorList(navHostController: NavHostController){
+fun DoctorList(navHostController: NavHostController) {
+    val viewModel: DoctorViewModel = viewModel()
+    val doctors = viewModel.doctorList
+    val context = LocalContext.current
 
-
+    LaunchedEffect(Unit) {
+        viewModel.fetchDoctors()
+    }
 
     Scaffold(
         floatingActionButton = {
-
             FloatingActionButton(
-                onClick = {
-
-                    navHostController.navigate(Routes.DoctorForm)
-
-                },
+                onClick = { navHostController.navigate(Routes.DoctorForm) },
                 modifier = Modifier.size(65.dp),
                 contentColor = Color.White,
             ) {
-
-                Icon(painter = painterResource(id = R.drawable.btn_1),
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp))
+                Icon(painter = painterResource(id = R.drawable.btn_1), contentDescription = null)
             }
         },
         topBar = {
             TopBarDoctor()
         }
-    ) {padding ->
+    ) { padding ->
 
-
-        LazyColumn (modifier = Modifier.padding(padding)){
-
-            item {
-                CardOfDr()
-                CardOfDr()
-                CardOfDr()
+            LazyColumn(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(doctors) { doctor ->
+                    CardOfDr (
+                        doctor = doctor,
+                        onClick = {
+                            val intent = Intent(context, DoctorDetailActivity::class.java)
+                            intent.putExtra("doctor", doctor)
+                            context.startActivity(intent)
+                        })
+                }
             }
-        }
-
-
-
-
 
     }
-    }
+}
 
-@Preview
+
 @Composable
-fun CardOfDr(
-
-) {
-    val context = LocalContext.current
-
-    androidx.compose.material.Card(
+fun CardOfDr(doctor: Doctor,
+             onClick: () -> Unit,) {
+    Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
             .clickable {
-
+                // Optionally handle item click
             },
         shape = RoundedCornerShape(12.dp),
-        elevation = 6.dp
 
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Load image from URL using Coil
+            val painter = rememberAsyncImagePainter(
+                model = doctor.imageUrl,
+                placeholder = painterResource(id = R.drawable.doct),
+                error = painterResource(id = R.drawable.doct)
+            )
 
             Image(
-                painter = painterResource(R.drawable.doct),
-                contentDescription = null,
+                painter = painter,
+                contentDescription = "Doctor Image",
                 modifier = Modifier
                     .size(80.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(12.dp)) // Changed from height to width (for horizontal spacing)
+            Spacer(modifier = Modifier.width(12.dp))
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-
                 Text(
-                    text = "Name",
+                    text = doctor.name,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
+                    Icon(
                         painter = painterResource(R.drawable.location),
                         contentDescription = null,
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = "Address",
+                        text = doctor.address,
                         color = Color.Black,
                         fontSize = 12.sp,
                         maxLines = 1,
@@ -160,18 +158,17 @@ fun CardOfDr(
                 }
 
                 Text(
-                    text ="Dentist",
+                    text = doctor.designation,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1
                 )
-
-
             }
         }
     }
 }
+
 
 @Preview
 @Composable

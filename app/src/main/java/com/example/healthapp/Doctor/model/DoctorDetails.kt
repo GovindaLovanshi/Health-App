@@ -1,15 +1,17 @@
 package com.example.healthapp.Doctor.model
 
-data class DoctorDetails(
+import java.io.Serializable
 
-val id: String = "",
-val name: String = "",
-val designation: String = "",
-val mobile: String = "",
-val address: String = "",
-val description: String = "",
-val date: String = "",
-val imageUrl: String = ""
-)
+data class Doctor(
+    val name: String = "",
+    val date: String = "",
+    val mobile: String = "",
+    val address: String = "",
+    val designation: String = "",
+    val description: String = "",
+    val imageUrl: String = "",
+    val id: String = "" // Firestore document ID
+): Serializable
+
 
 

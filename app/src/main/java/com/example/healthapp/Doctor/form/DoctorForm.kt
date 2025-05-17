@@ -52,30 +52,41 @@ import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
 import com.example.healthapp.R
 import com.example.healthapp.blood.form.TopBarBloodForm
 import android.net.Uri
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
+import com.example.healthapp.Doctor.model.Doctor
 import com.example.healthapp.Naviagtion.Routes
 
 
 @Composable
 fun DoctorForm(navHostController: NavHostController) {
     val viewModel : DoctorViewModel = viewModel()
-
     val context = LocalContext.current
-    val formList by viewModel.formState
-    val loading by viewModel.loading
+    val scope = rememberCoroutineScope()
+
 
     var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
     var mobile by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var designation by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
+    var about by remember { mutableStateOf("") }
     var imageUri by remember {  mutableStateOf<Uri?>(null) }
 
+
+    // Image picker
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri -> imageUri = uri }
-    )
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
+
+
+
     Scaffold(
 
         topBar = {
@@ -83,10 +94,47 @@ fun DoctorForm(navHostController: NavHostController) {
 
             TopBarDoctorForm()
 
+        },
+        bottomBar = {
+
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    val doctor = Doctor(
+                        name = name,
+                        date = date,
+                        mobile = mobile,
+                        address = address,
+                        designation = designation,
+                        description = about,
+                    )
+
+                    viewModel.addDoctor(doctor, imageUri,
+                        onSuccess = {
+                            Toast.makeText(context, "Doctor added successfully", Toast.LENGTH_SHORT).show()
+                            navHostController.popBackStack()
+                        },
+                        onError = {
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                },
+
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))
+            ) {
+                Text(
+                    text = "Add", color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+
         }
     ) { padding ->
 
-        Column(
+        LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = colorResource(R.color.lightBlue)),
@@ -94,207 +142,177 @@ fun DoctorForm(navHostController: NavHostController) {
         )
         {
 
+            // Image Picker
 
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(android.graphics.Color.parseColor("#EEEEFB"))),
-                horizontalAlignment = Alignment.CenterHorizontally
-
-            ) {
-
-
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                Button(onClick = { launcher.launch("image/*") }, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-                    Text("Select Image")
-                }
-
-                imageUri?.let {
-                    Image(painter = rememberImagePainter(it), contentDescription = null, modifier = Modifier.fillMaxWidth().height(100.dp).padding(vertical = 8.dp))
-                }
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-
-                TextField(
-                    modifier = Modifier.width(350.dp),
-                    value = name,
-                    onValueChange = { name = it },
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                        unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                    ),
-                    placeholder = { Text(text = "Name Of Donater") }
-
-                )
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-
-
-                    TextField(
-                        modifier = Modifier.width(170.dp),
-                        value = date,
-
-
-                        onValueChange = { date = it },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                        ),
-                        placeholder = { Text(text = "Enter Date") }
-
-                    )
-
-                    Spacer(modifier = Modifier.padding())
-
-                    TextField(
-                        modifier = Modifier.width(170.dp),
-                        value = designation,
-                        onValueChange = { designation = it },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                        ),
-                        placeholder = { Text(text = "Designation") }
-
-                    )
-
-
-                }
-//            Spacer(modifier = Modifier.padding(20.dp))
-
-//            Row (horizontalArrangement = Arrangement.spacedBy(8.dp)){
-//
-//
-//                TextField(
-//                    modifier = Modifier.width(170.dp),
-//                    value = text,
-//                    onValueChange = { text = it },
-//                    placeholder = { Text(text = "Name DR") }
-//
-//                )
-//
-//                Spacer(modifier = Modifier.padding())
-//
-//                TextField(
-//                    modifier = Modifier.width(170.dp),
-//                    value = text,
-//                    onValueChange = { text = it },
-//                    placeholder = { Text(text = "Name DR") }
-//
-//                )
-//
-//
-//
-//            }
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-
-
-                    TextField(
-                        modifier = Modifier.width(170.dp),
-                        value = address,
-                        onValueChange = { address = it },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                        ),
-                        placeholder = { Text(text = "Address") }
-
-                    )
-
-                    Spacer(modifier = Modifier.padding())
-
-                    TextField(
-                        modifier = Modifier.width(170.dp),
-                        value = mobile,
-                        onValueChange = { mobile = it },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                        ),
-                        placeholder = { Text(text = "Mobile Number") }
-
-                    )
-
-
-                }
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-
-
-                TextField(
-                    modifier = Modifier.width(350.dp).height(200.dp),
-                    value = description,
-                    onValueChange = { description = it },
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                        unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                    ),
-                    placeholder = { Text(text = "About Of Doctor") }
-
-                )
-
-                Spacer(modifier = Modifier.padding(10.dp))
-
-                Button(
-                    modifier = Modifier.width(250.dp),
-                    onClick = {
-                        viewModel.submitForm(
-                            name,designation,address,mobile,designation,date, imageUri,
-                            onSuccess = { Toast.makeText(context, "Form submitted successfully", Toast.LENGTH_SHORT).show()
-                                navHostController.navigate(Routes.DoctorList)
-                                },
-                            onFailure = { e -> Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show() }
-                        )
-                    },
-
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { launcher.launch("image/*") }
+                        .background(Color.LightGray),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Add", color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
+                    if (imageUri != null) {
+                        Image(
+                            painter = rememberAsyncImagePainter(imageUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Text("Tap to select image")
+                    }
                 }
 
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color(android.graphics.Color.parseColor("#EEEEFB"))),
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ) {
+
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+
+                    TextField(
+                        modifier = Modifier.width(350.dp),
+                        value = name,
+                        onValueChange = { name = it },
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                        ),
+                        placeholder = { Text(text = "Name Of Donater") }
+
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+
+                        TextField(
+                            modifier = Modifier.width(170.dp),
+                            value = date,
+
+
+                            onValueChange = { date = it },
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                                unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                            ),
+                            placeholder = { Text(text = "Enter Date") }
+
+                        )
+
+                        Spacer(modifier = Modifier.padding())
+
+                        TextField(
+                            modifier = Modifier.width(170.dp),
+                            value = designation,
+                            onValueChange = { designation = it },
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                                unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                            ),
+                            placeholder = { Text(text = "Designation") }
+
+                        )
+
+
+                    }
+
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+
+                        TextField(
+                            modifier = Modifier.width(170.dp),
+                            value = address,
+                            onValueChange = { address = it },
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                                unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                            ),
+                            placeholder = { Text(text = "Address") }
+
+                        )
+
+                        Spacer(modifier = Modifier.padding())
+
+                        TextField(
+                            modifier = Modifier.width(170.dp),
+                            value = mobile,
+                            onValueChange = { mobile = it },
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                                unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                            ),
+                            placeholder = { Text(text = "Mobile Number") }
+
+                        )
+
+
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+
+
+                    TextField(
+                        modifier = Modifier.width(350.dp).height(200.dp),
+                        value = about,
+                        onValueChange = { about = it },
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
+                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
+                        ),
+                        placeholder = { Text(text = "About Of Doctor") }
+
+                    )
+
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+
+                }
 
             }
-
         }
 
     }

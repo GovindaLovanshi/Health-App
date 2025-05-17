@@ -2,6 +2,9 @@ package com.example.healthapp.Doctor.view
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,30 +42,52 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import com.example.healthapp.Doctor.model.Doctor
 import com.example.healthapp.R
 
-@Preview
+
+
+class DoctorDetailActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Get doctor from intent
+        val doctor = intent.getSerializableExtra("doctor") as? Doctor
+
+        setContent {
+            doctor?.let {
+                DoctorDetailScreen(doctor = it)
+            }
+        }
+    }
+}
 @Composable
-fun DoctorDetailScreen(){
-    val context= LocalContext.current
-    Scaffold (
+fun DoctorDetailScreen(doctor: Doctor) {
+    val context = LocalContext.current
+
+    Scaffold(
         bottomBar = {
             Button(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
-                ,
-                onClick = { /* TODO: Implement click action */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onClick = {
+
+                },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))
             ) {
-                androidx.compose.material3.Text(
-                    text = "Make Appointment ", color = Color.White,
+                Text(
+                    text = "Make Appointment",
+                    color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                 )
             }
         }
-    ){padding->
+    ) { padding ->
 
         Column(
             modifier = Modifier
@@ -70,178 +96,113 @@ fun DoctorDetailScreen(){
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-
-
+            // Doctor image from URL
             Image(
-                painter = painterResource(R.drawable.doct2),
+                painter = rememberAsyncImagePainter(doctor.imageUrl),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(290.dp)
-                    .background(
-                        colorResource(R.color.lightGrey),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(16.dp)
+                    .clip(RoundedCornerShape(8.dp))
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
 
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text(
-                    text = "Dentist Specialist",
-                    fontSize = 23.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(end = 16.dp)
-                )
-//            Text(
-//                text = "300 Pr/Day",
-//                fontSize = 22.sp
-//            )
-            }
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier.padding(top = 16.dp)
-//        ) {
-//            Text(
-//                text = "Previous Booking",
-//                fontWeight = FontWeight.Bold,
-//                modifier = Modifier.weight(1f)
-//            )
-//            Image(
-//                painter = painterResource(id = R.drawable.fav_icon),
-//                contentDescription = null,
-//                modifier = Modifier.padding(end = 8.dp)
-//            )
-//            Text(text = " Rating", style = MaterialTheme.typography.bodyMedium)
-//
-//        }
-
+            Text(
+                text = doctor.designation,
+                fontSize = 23.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(end = 16.dp)
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(start = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
-
-                Spacer(modifier = Modifier.height(12.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-
-                    Text(
-                        text = "9 :00 AM",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-
-                    Spacer(modifier = Modifier.width(200.dp))
-
-                    Text(
-                        text = "5 : 00 PM",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp,
-                        maxLines = 1,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-
-                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.shadow(2.dp, shape = CircleShape).fillMaxWidth()) {
-                    Image(painter = painterResource(R.drawable.homed),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(60.dp).
-                            padding(start = 12.dp)
-                            .clip(CircleShape),
-
-                        )
-
-                    Spacer(modifier = Modifier.width(15.dp))
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text(
-                            text = "Dr Gajendra Singh",
-                            color = Color.Black,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1
-                        )
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = painterResource(R.drawable.location),
-                                contentDescription = null
-                            )
-                            Text(
-                                text = "Indore",
-                                color = Color.Black,
-                                fontSize = 12.sp,
-                                maxLines = 1,
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
-
-                    }
-                    Row{
-
-                        Image(painter = painterResource(R.drawable.bluecall),
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp)
-                                .clickable{
-                                    val phoneNumber="tel:"
-                                    val diaIntent= Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
-                                    context.startActivity(diaIntent)
-                                }
-
-
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-
-
                 Text(
-                    text = "About The Doctor",
+                    text = "9:00 AM",
                     color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
                 )
-
-                HorizontalDivider()
-                Spacer(modifier = Modifier.height(12.dp))
-
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "A good dentist is qualified, experienced, and compassionate, providing quality care in a comfortable and relaxed environment.\n" +
-                            " They have a Doctor of Dental Surgery (DDS) or Doctor of Dental Medicine (DMD) degree from an accredited dental school and are licensed to practice dentistry in their state.\n" +
-                            " They offer a variety of services including cleanings, fillings, crowns, bridges, and dentures, and may also have experience in orthodontic treatment.",
+                    text = "5:00 PM",
                     color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
                 )
-
-
-                Spacer(modifier = Modifier.height(150.dp))
-                HorizontalDivider()
-
-
-
             }
-        }
 
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(doctor.imageUrl),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(60.dp)
+                        .clip(CircleShape)
+                )
+
+                Spacer(modifier = Modifier.width(15.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = doctor.name,
+                        color = Color.Black,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(R.drawable.location),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            text = doctor.address,
+                            color = Color.Black,
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                }
+
+                Image(
+                    painter = painterResource(R.drawable.phone),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable {
+                            val phoneIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${doctor.mobile}"))
+                            context.startActivity(phoneIntent)
+                        }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "About The Doctor",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp
+            )
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+            Text(
+                text = doctor.description ?: "No description provided.",
+                color = Color.Black,
+                fontSize = 14.sp
+            )
+
+            Spacer(modifier = Modifier.height(100.dp))
+        }
     }
 }

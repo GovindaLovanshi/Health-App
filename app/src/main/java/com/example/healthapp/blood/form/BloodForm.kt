@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,6 +52,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import com.example.healthapp.Doctor.model.Doctor
+import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
 import com.example.healthapp.blood.model.BloodDetails
@@ -60,9 +64,9 @@ import com.example.healthapp.blood.viewmodel.BloodDonaterViewModel
 
 @Composable
 fun BloodForm(navHostController: NavHostController) {
-    val viewModel: BloodDonaterViewModel = viewModel()
+    val viewModel : BloodDonaterViewModel = viewModel()
     val context = LocalContext.current
-
+    val scope = rememberCoroutineScope()
     var name by rememberSaveable { mutableStateOf("") }
     var dob by rememberSaveable { mutableStateOf("") }
     var mobile by rememberSaveable { mutableStateOf("") }
@@ -71,6 +75,8 @@ fun BloodForm(navHostController: NavHostController) {
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
+
+    // Image picker
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -89,22 +95,29 @@ fun BloodForm(navHostController: NavHostController) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = { launcher.launch("image/*") }) {
-                Text("Select Image")
-            }
+            // Image Picker
 
-            Spacer(modifier = Modifier.height(8.dp))
 
-            imageUri?.let {
-                AsyncImage(
-                    model = it,
-                    contentDescription = "Selected Image",
+                Box(
                     modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            }
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { launcher.launch("image/*") }
+                        .background(Color.LightGray),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (imageUri != null) {
+                        Image(
+                            painter = rememberAsyncImagePainter(imageUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Text("Tap to select image")
+                    }
+                }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -176,21 +189,24 @@ fun BloodForm(navHostController: NavHostController) {
             Button(
                 onClick = {
                     if (name.isNotBlank() && dob.isNotBlank() && blood.isNotBlank()
-                        && address.isNotBlank() && mobile.isNotBlank() && imageUri != null
+                        && address.isNotBlank() && mobile.isNotBlank()
                     ) {
-                        viewModel.submitDonorData (
+                        val donor = BloodDetails(
                             name = name,
                             dob = dob,
                             blood = blood,
                             address = address,
                             mobile = mobile,
-                            imageUri = imageUri!!,
+
+                        )
+
+                        viewModel.addDonor(donor, imageUri,
                             onSuccess = {
-                                Toast.makeText(context, "Submitted Successfully", Toast.LENGTH_SHORT).show()
-                                navHostController.popBackStack() // Go back
+                                Toast.makeText(context, "Doctor added successfully", Toast.LENGTH_SHORT).show()
+                                navHostController.popBackStack()
                             },
-                            onFailure = {
-                                Toast.makeText(context, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                            onError = {
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                             }
                         )
                     } else {

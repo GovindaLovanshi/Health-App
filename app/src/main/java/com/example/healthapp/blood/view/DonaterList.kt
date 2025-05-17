@@ -1,7 +1,10 @@
 package com.example.healthapp.blood.view
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -46,25 +46,25 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
-import com.example.healthapp.blood.model.BloodDetails
 import com.example.healthapp.blood.viewmodel.BloodDonaterViewModel
 
 
 import androidx.compose.runtime.getValue
-
+import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
+import com.example.healthapp.blood.model.BloodDetails
 
 
 @Composable
 
 fun DonaterList(navHostController: NavHostController) {
-    val bloodViewModel: BloodDonaterViewModel = viewModel()
-    val donors by bloodViewModel.donors.collectAsState()
+    val viewModel: BloodDonaterViewModel = viewModel()
+    val donors = viewModel.donorList
     val context = LocalContext.current
 
-    // Fetch donor data when the screen first composes
     LaunchedEffect(Unit) {
-        bloodViewModel.fetchDonors()
+        viewModel.fetchDonors()
     }
+
 
     Scaffold(
         floatingActionButton = {
@@ -87,17 +87,7 @@ fun DonaterList(navHostController: NavHostController) {
         }
     ) { padding ->
 
-        if (donors.isEmpty()) {
-            // Optional: show a message if no donors are available
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("No blood donors found.")
-            }
-        } else {
+
             LazyColumn(
                 modifier = Modifier
                     .padding(padding)
@@ -105,18 +95,20 @@ fun DonaterList(navHostController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(donors) { donor ->
-                    DonorItem(donor = donor,
+                    DonorItem(
+                        donor = donor,
                         onClick = {})
                 }
             }
-        }
+
     }
 }
 
 
 @Composable
-fun DonorItem(donor: BloodDetails,
-              onClick: () -> Unit,) {
+fun DonorItem(
+    donor: BloodDetails,
+    onClick: () -> Unit,) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,6 +118,8 @@ fun DonorItem(donor: BloodDetails,
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
     ) {
+
+        val context = LocalContext.current
         Column {
             Row(
                 modifier = Modifier.padding(16.dp),
@@ -207,6 +201,10 @@ fun DonorItem(donor: BloodDetails,
                     painter = painterResource(R.drawable.bluecall),
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
+                        .clickable {
+                            val phoneIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${donor.mobile}"))
+                            context.startActivity(phoneIntent)
+                        }
                 )
             }
         }

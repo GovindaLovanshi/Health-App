@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 
 
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 
 import com.android.identity.util.UUID
+import com.example.healthapp.Doctor.model.Doctor
 import com.example.healthapp.blood.model.BloodDetails
 
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,88 +21,79 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class BloodDonaterViewModel :ViewModel(){
+class BloodDonaterViewModel :ViewModel() {
 
+    private val db = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
 
+    var donorList by mutableStateOf<List<BloodDetails>>(emptyList())
+        private set
 
+    var loading by mutableStateOf(false)
+        private set
 
+    fun addDonor(donor: BloodDetails, imageUri: Uri?, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        loading = true
 
-        private val db = FirebaseFirestore.getInstance()
-        private val storage = FirebaseStorage.getInstance()
-        private val _donors = MutableStateFlow<List<BloodDetails>>(emptyList())
-        val donors: StateFlow<List<BloodDetails>> = _donors
+        if (imageUri != null) {
+            val fileName = java.util.UUID.randomUUID().toString()
+            val imageRef = storage.reference.child("donors/$fileName")
 
-        // 🔹 Add/Submit data
-        fun submitDonorData(
-            name: String,
-            dob: String,
-            blood: String,
-            address: String,
-            mobile: String,
-            imageUri: Uri?,
-            onSuccess: () -> Unit,
-            onFailure: (Exception) -> Unit
-        ) {
-            viewModelScope.launch {
-                if (imageUri != null) {
-                    val imageRef = storage.reference.child("blood_donors/${UUID.randomUUID()}.jpg")
-                    imageRef.putFile(imageUri)
-                        .continueWithTask { task ->
-                            if (!task.isSuccessful) {
-                                task.exception?.let { throw it }
-                            }
-                            imageRef.downloadUrl
-                        }
-                        .addOnSuccessListener { uri ->
-                            val donor = BloodDetails(
-                                id = UUID.randomUUID().toString(),
-                                name = name,
-                                dob = dob,
-                                blood = blood,
-                                address = address,
-                                mobile = mobile,
-                                image = uri.toString()
-                            )
-                            db.collection("blood_donors")
-                                .document(donor.id)
-                                .set(donor)
-                                .addOnSuccessListener { onSuccess() }
-                                .addOnFailureListener { e -> onFailure(e) }
-                        }
-                        .addOnFailureListener { e -> onFailure(e) }
-                } else {
-                    onFailure(Exception("Image not selected"))
-                }
-            }
-        }
-
-        // 🔹 Fetch all donors
-        fun fetchDonors() {
-            db.collection("blood_donors")
-                .get()
-                .addOnSuccessListener { result ->
-                    val donorsList = result.mapNotNull { it.toObject(BloodDetails::class.java) }
-                    _donors.value = donorsList
-                }
-        }
-
-        // 🔹 Delete donor
-        fun deleteDonor(id: String, imageUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-            val imageRef = storage.getReferenceFromUrl(imageUrl)
-
-            imageRef.delete().addOnSuccessListener {
-
-                db.collection("blood_donors")
-                    .document(id)
-                    .delete()
-                    .addOnSuccessListener {
-                        _donors.value = _donors.value.filterNot { it.id == id }
-                        onSuccess()
+            imageRef.putFile(imageUri)
+                .continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let { throw it }
                     }
-                    .addOnFailureListener { onFailure(it) }
-            }.addOnFailureListener { onFailure(it) }
+                    imageRef.downloadUrl
+                }
+                .addOnSuccessListener { uri ->
+                    val doctorWithImage = donor.copy(image = uri.toString())
+
+                    db.collection("donors")
+                        .add(doctorWithImage)
+                        .addOnSuccessListener {
+                            loading = false
+                            onSuccess()
+                        }
+                        .addOnFailureListener {
+                            loading = false
+                            onError(it.message ?: "Failed to add donor")
+                        }
+                }
+                .addOnFailureListener {
+                    loading = false
+                    onError(it.message ?: "Image upload failed")
+                }
+        } else {
+            db.collection("donors")
+                .add(donor)
+                .addOnSuccessListener {
+                    loading = false
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    loading = false
+                    onError(it.message ?: "Failed to add donor")
+                }
         }
     }
+
+    fun fetchDonors() {
+        loading = true
+        db.collection("donors")
+            .get()
+            .addOnSuccessListener { result ->
+                donorList = result.documents.map { doc ->
+                    doc.toObject(BloodDetails::class.java)?.copy(id = doc.id) ?: BloodDetails()
+                }
+                loading = false
+            }
+            .addOnFailureListener {
+                loading = false
+            }
+    }
+
+}
 
 
 

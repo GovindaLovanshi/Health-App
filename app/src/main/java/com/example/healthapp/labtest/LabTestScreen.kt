@@ -43,6 +43,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
+import com.example.healthapp.Screens.Search
 
 @Preview
 @Composable
@@ -50,6 +51,8 @@ fun LabTestScreen(){
 
     Scaffold (
         topBar = {
+
+            TopBarLabTest()
 
         }
 
@@ -65,14 +68,15 @@ fun LabTestScreen(){
         ){
 
             item {
-                TopBar()
+                Search()
+
             }
 
             item {
                 Row(modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp)) {
 
                     Text(
-                        text = "Recommended Packages", color = Color.Black,
+                        text = "Recommended Packages", color = colorResource(id = R.color.darkGreen),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.weight(1f)
@@ -81,12 +85,15 @@ fun LabTestScreen(){
                     Text(
                         text = "View all",
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(android.graphics.Color.parseColor("#0f4d0f")),
+                        color = colorResource(id = R.color.darkGreen),
                         fontSize = 16.sp
                     )
                 }
 
-                HorizontalDivider()
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
 
@@ -253,216 +260,36 @@ fun Item() {
 
 }
 
-@Composable
-fun TopBar() {
-    val horizontalPadding = 16.dp
-    val verticalPadding = 16.dp
 
-    ConstraintLayout(
+@Preview
+@Composable
+fun TopBarLabTest (){
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-    ) {
-        val (bluebox, title1, title2, profile, building, whiteBox) = createRefs()
-
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(255.dp)
+            .height(75.dp)
             .background(color = colorResource(R.color.darkGreen))
-            .constrainAs(bluebox) {
-                top.linkTo(parent.top)
-            }
-        )
-
-//        Image(painter = painterResource(R.drawable.profile),
-//            contentDescription = null,
-//            modifier = Modifier.constrainAs(building) {
-//                bottom.linkTo(bluebox.bottom)
-//            }
-//        )
-        Image(painter = painterResource(R.drawable.notification),
-            contentDescription = null,
+    ) {
+        Row(
             modifier = Modifier
-                .padding(horizontal = horizontalPadding, vertical = verticalPadding)
-                .constrainAs(profile) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-        )
-
-        Text(
-            text = "सुप्रभात! ",
-            fontSize = 20.sp,
-            color = Color.White,
-            modifier = Modifier
-                .constrainAs(title1) {
-                    top.linkTo(profile.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        )
-        Text(
-            text = "आज आप क्या कर रहे हैं? \uD83D\uDE0A",
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier
-                .constrainAs(title2) {
-                    top.linkTo(title1.bottom)
-                    bottom.linkTo(whiteBox.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        )
-
-        ConstraintLayout(modifier = Modifier
-            .padding(horizontal = 24.dp)
-            .fillMaxWidth()
-            .height(110.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-            .constrainAs(whiteBox) {
-                top.linkTo(bluebox.bottom)
-                bottom.linkTo(bluebox.bottom)
-            }
-            .clip(RoundedCornerShape(10.dp))
+                .align(Alignment.Center)
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            val (icon1, icon2, balance, reward, amount, wallet, arrow1, arrow2, arrow3, line1, line2) = createRefs()
 
-            Image(painter = painterResource(R.drawable.mar),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = horizontalPadding, top = verticalPadding)
-                    .width(20.dp)
-                    .height(20.dp)
-                    .constrainAs(icon1) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                    }
-            )
 
             Text(
-                text = "WhatsApp ",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                style = TextStyle(textDecoration = TextDecoration.Underline),
+                text = " Body Test List",
+                fontSize = 20.sp,
+                color = Color.White,
                 modifier = Modifier
-                    .padding(start = 8.dp)
-                    .constrainAs(wallet) {
-                        bottom.linkTo(icon1.bottom)
-                        start.linkTo(icon1.end)
-                    }
-                    .clickable {
-
-                    }
-            )
-            Image(painter = painterResource(R.drawable.arrow),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = horizontalPadding)
-                    .constrainAs(arrow1) {
-                        top.linkTo(wallet.top)
-                        bottom.linkTo(wallet.bottom)
-                        start.linkTo(wallet.end)
-                    }
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                fontWeight = FontWeight.Bold
             )
 
-            Image(painter = painterResource(R.drawable.harvester),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = horizontalPadding, bottom = verticalPadding)
-                    .width(20.dp)
-                    .height(20.dp)
-                    .constrainAs(icon2) {
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                    }
-            )
-            Text(
-                text = "Call",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                style = TextStyle(textDecoration = TextDecoration.Underline),
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .constrainAs(reward) {
-                        top.linkTo(icon2.top)
-                        start.linkTo(icon2.end)
-                    }
-            )
-
-            Image(painter = painterResource(R.drawable.arrow),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = horizontalPadding)
-                    .constrainAs(arrow2) {
-                        top.linkTo(reward.top)
-                        bottom.linkTo(reward.bottom)
-                        start.linkTo(reward.end)
-                    }
-            )
-
-            Box(modifier = Modifier
-                .width(1.dp)
-                .fillMaxHeight()
-                .padding(vertical = verticalPadding)
-                .background(colorResource(R.color.grey))
-                .constrainAs(line1) {
-                    centerTo(parent)
-                }
-            )
-            Box(Modifier
-                .height(1.dp)
-                .width(170.dp)
-                .padding(horizontal = 16.dp)
-                .background(colorResource(R.color.grey))
-                .constrainAs(line2) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                }
-
-            )
-            Text(
-                text = "List of Blood",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                style = TextStyle(textDecoration = TextDecoration.Underline),
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(start = horizontalPadding, top = 32.dp)
-                    .constrainAs(balance) {
-                        top.linkTo(parent.top)
-                        start.linkTo(line1.end)
-                    }
-            )
-            Text(
-                text = "Switch",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(start = horizontalPadding, top = 8.dp)
-                    .constrainAs(amount) {
-                        top.linkTo(balance.bottom)
-                        start.linkTo(balance.start)
-                    }
-                    .clickable {
-
-                    }
-            )
-            Image(painter = painterResource(R.drawable.arrow),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = horizontalPadding)
-                    .constrainAs(arrow3) {
-
-                        bottom.linkTo(amount.bottom)
-                        start.linkTo(amount.end)
-                    }
-            )
         }
     }
 }
