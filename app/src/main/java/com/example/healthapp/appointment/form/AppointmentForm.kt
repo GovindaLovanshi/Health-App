@@ -54,11 +54,16 @@ import com.example.healthapp.blood.form.TopBarBloodForm
 import android.net.Uri
 import androidx.navigation.NavHostController
 import com.example.healthapp.Naviagtion.Routes
+import com.example.healthapp.appointment.model.Appointment
+import com.example.healthapp.appointment.viewmodel.AppointmentViewModel
 
 
 @Preview
 @Composable
 fun AppointmentForm() {
+
+    val context = LocalContext.current
+    val viewModel: AppointmentViewModel = viewModel()
 
 
     var name by remember { mutableStateOf("") }
@@ -289,7 +294,21 @@ fun AppointmentForm() {
                 Button(
                     modifier = Modifier.width(250.dp),
                     onClick = {
-
+                        if (name.isNotBlank() && mobile.isNotBlank()) {
+                            val appointment = Appointment(
+                                name = name,
+                                startTime = starttime,
+                                endTime = endtime,
+                                address = address,
+                                mobile = mobile,
+                                injury = injury,
+                                date = date
+                            )
+                            viewModel.addAppointment(appointment)
+                            Toast.makeText(context, "Appointment Added", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+                        }
                     },
 
                     shape = RoundedCornerShape(10.dp),

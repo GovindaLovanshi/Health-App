@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -26,6 +27,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,13 +44,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
+import com.example.healthapp.appointment.model.Appointment
+import com.example.healthapp.appointment.viewmodel.AppointmentViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.healthapp.blood.view.DonorItem
+
 
 @Preview
 @Composable
 fun AppointmentList(){
+
+    val viewModel : AppointmentViewModel = viewModel  ()
+    val appointments by viewModel.appointments.collectAsState()
+
+
+    LaunchedEffect(true) {
+        viewModel.fetchAppointments()
+    }
 
     Scaffold (
         topBar = {
@@ -66,28 +84,23 @@ fun AppointmentList(){
             horizontalAlignment = Alignment.CenterHorizontally
 
         ){
-
-
-
-
-
-
-
-            item {
-
-                Item()
-                Item()
-              
-
+            items(appointments) { appointment ->
+                Item(
+                    appointment = appointment,
+                    onClick = {})
             }
+
         }
     }
 
 }
 
-@Preview
+
 @Composable
-fun Item() {
+fun Item(
+    appointment: Appointment,
+    onClick: () -> Unit,
+) {
 
     Card(
         modifier = Modifier
@@ -115,7 +128,7 @@ fun Item() {
 
 
                 Text(
-                    text = "Gaju Singh",
+                    text = appointment.name,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -127,7 +140,7 @@ fun Item() {
                         contentDescription = null
                     )
                     Text(
-                        text = "Vijay Nagar ",
+                        text = appointment.address,
                         color = Color.Black,
                         fontSize = 12.sp,
                         maxLines = 1,
@@ -136,7 +149,7 @@ fun Item() {
                 }
 
                 Text(
-                    text = "+91 8269113777",
+                    text = appointment.mobile,
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
@@ -164,7 +177,7 @@ fun Item() {
                         contentDescription = null
                     )
                     Text(
-                        text = "12 : 00 PM",
+                        text = appointment.startTime,
                         color = Color.Black,
                         fontSize = 14.sp,
                         maxLines = 1,
@@ -185,7 +198,7 @@ fun Item() {
                         contentDescription = null
                     )
                     Text(
-                        text = "1 :00 PM",
+                        text = appointment.endTime,
                         color = Color.Black,
                         fontSize = 14.sp,
                         maxLines = 1,
@@ -212,7 +225,7 @@ fun Item() {
                         contentDescription = null
                     )
                     Text(
-                        text = "20 May 2025",
+                        text = appointment.date,
                         color = Color.Black,
                         fontSize = 14.sp,
                         maxLines = 1,
@@ -235,7 +248,7 @@ fun Item() {
         Spacer(modifier = Modifier.height(15.dp))
 
         Text(
-            text = "Fever , Headache ,",
+            text = appointment.injury,
             color = Color.Black,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,

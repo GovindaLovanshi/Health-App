@@ -3,26 +3,23 @@ package com.example.healthapp.Naviagtion
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.healthapp.AIChatBot.ChatPage
-import com.example.healthapp.AIChatBot.ChatViewModel
 import com.example.healthapp.Authentication.view.RegistrationScreen
 import com.example.healthapp.Doctor.form.DoctorForm
 import com.example.healthapp.Doctor.view.DoctorList
-import com.example.healthapp.Naviagtion.Routes.ChatActivity
-import com.example.healthapp.Naviagtion.Routes.Intro
 import com.example.healthapp.Screens.HomeScreen
 import com.example.healthapp.Screens.Intro
 import com.example.healthapp.Screens.Profile
 import com.example.healthapp.Screens.Setting
 import com.example.healthapp.Screens.SplashScreen
+import com.example.healthapp.appointment.form.AppointmentForm
 import com.example.healthapp.appointment.view.AppointmentList
 import com.example.healthapp.blood.form.BloodForm
 import com.example.healthapp.blood.view.DonaterList
-import com.example.healthapp.labtest.LabTestScreen
+import com.example.healthapp.labtest.view.LabTestScreen
 
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
@@ -92,6 +89,11 @@ fun Navigation(){
         composable<Routes.AppointmentList> {
 
             AppointmentList()
+        }
+
+        composable<Routes.AppointmentForm> {
+
+            AppointmentForm()
         }
 
     }

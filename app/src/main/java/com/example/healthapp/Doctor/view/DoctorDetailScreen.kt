@@ -42,8 +42,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.healthapp.Doctor.model.Doctor
+import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
 
 
@@ -66,6 +68,9 @@ class DoctorDetailActivity : ComponentActivity() {
 @Composable
 fun DoctorDetailScreen(doctor: Doctor) {
     val context = LocalContext.current
+    val navHostController : NavHostController = NavHostController(
+        context = context
+    )
 
     Scaffold(
         bottomBar = {
@@ -74,7 +79,7 @@ fun DoctorDetailScreen(doctor: Doctor) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onClick = {
-
+//                    navHostController.navigate(Routes.D)
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))

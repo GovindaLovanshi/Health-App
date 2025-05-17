@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,7 +44,7 @@ fun Setting(navHostController: NavHostController){
         ConstraintLayout(
             Modifier
                 .height(200.dp)
-                .background(color = Color(android.graphics.Color.parseColor("#293A16")))
+                .background(color = colorResource(id = R.color.darkGreen))
         ) {
             val (topImg, profile, title, back, pen) = createRefs()
 
