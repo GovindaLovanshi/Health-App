@@ -91,10 +91,7 @@ fun Navigation(){
             AppointmentList()
         }
 
-        composable<Routes.AppointmentForm> {
 
-            AppointmentForm()
-        }
 
     }
 }

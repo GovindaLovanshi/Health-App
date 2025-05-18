@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import android.util.Log
+
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -84,6 +86,7 @@ fun DoctorList(navHostController: NavHostController) {
                     CardOfDr (
                         doctor = doctor,
                         onClick = {
+                            Log.d("DoctorList", "Doctor clicked: ${doctor.name}")
                             val intent = Intent(context, DoctorDetailActivity::class.java)
                             intent.putExtra("doctor", doctor)
                             context.startActivity(intent)
@@ -103,7 +106,7 @@ fun CardOfDr(doctor: Doctor,
             .padding(8.dp)
             .fillMaxWidth()
             .clickable {
-                // Optionally handle item click
+                onClick()
             },
         shape = RoundedCornerShape(12.dp),
 

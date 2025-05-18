@@ -1,5 +1,7 @@
 package com.example.healthapp.appointment.model
 
+import kotlinx.serialization.Serializable
+
 data class Appointment(
     val name: String = "",
     val startTime: String = "",

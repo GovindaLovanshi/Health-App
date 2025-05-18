@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Doctor.view.DoctorDetailActivity" />
+        <activity android:name=".appointment.form.AppointmentFormActivity" />
+
+
     </application>
 
 </manifest>

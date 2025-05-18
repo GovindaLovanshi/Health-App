@@ -47,7 +47,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.healthapp.Doctor.model.Doctor
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.R
-
+import com.example.healthapp.appointment.form.AppointmentForm
+import com.example.healthapp.appointment.form.AppointmentFormActivity
 
 
 class DoctorDetailActivity : ComponentActivity() {
@@ -55,8 +56,14 @@ class DoctorDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Get doctor from intent
-        val doctor = intent.getSerializableExtra("doctor") as? Doctor
+        val doctor = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("doctor", Doctor::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra("doctor") as? Doctor
+        }
+
+
 
         setContent {
             doctor?.let {
@@ -68,9 +75,7 @@ class DoctorDetailActivity : ComponentActivity() {
 @Composable
 fun DoctorDetailScreen(doctor: Doctor) {
     val context = LocalContext.current
-    val navHostController : NavHostController = NavHostController(
-        context = context
-    )
+
 
     Scaffold(
         bottomBar = {
@@ -79,7 +84,8 @@ fun DoctorDetailScreen(doctor: Doctor) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onClick = {
-//                    navHostController.navigate(Routes.D)
+                    val intent = Intent(context, AppointmentFormActivity::class.java)
+                    context.startActivity(intent)
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.darkGreen))

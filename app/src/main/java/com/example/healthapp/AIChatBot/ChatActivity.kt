@@ -72,7 +72,7 @@ fun MessageList(modifier: Modifier = Modifier, messageList: List<ModelActivity>)
         ) {
             Icon(
                 modifier = Modifier.size(60.dp),
-                painter = painterResource(id = R.drawable.fav_bold),
+                painter = painterResource(id = R.drawable.brain),
                 contentDescription = "Icon",
                 tint = Pink40,
             )
@@ -152,10 +152,10 @@ fun MessageInput(onMessageSend: (String) -> Unit) {
         Box(
             modifier = Modifier
                 .padding(start = 8.dp)
-                .size(60.dp) // बड़ा सर्कल
-                .clip(RoundedCornerShape(30.dp)) // सर्कुलर आकार
-                .background(MaterialTheme.colorScheme.primary), // बैकग्राउंड कलर
-            contentAlignment = Alignment.Center // आइकन को सेंटर करें
+                .size(60.dp)
+                .clip(RoundedCornerShape(30.dp))
+                .background(MaterialTheme.colorScheme.primary),
+            contentAlignment = Alignment.Center
         ) {
             IconButton(
                 onClick = {

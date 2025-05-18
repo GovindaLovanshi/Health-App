@@ -48,6 +48,5 @@ sealed class Routes {
     @Serializable
     data object AppointmentList:Routes()
 
-    @Serializable
-    data object AppointmentForm:Routes()
+
 }

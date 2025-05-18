@@ -52,12 +52,25 @@ import com.example.healthapp.Doctor.viewmodel.DoctorViewModel
 import com.example.healthapp.R
 import com.example.healthapp.blood.form.TopBarBloodForm
 import android.net.Uri
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.Surface
 import androidx.navigation.NavHostController
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.appointment.model.Appointment
 import com.example.healthapp.appointment.viewmodel.AppointmentViewModel
+import com.example.healthapp.ui.theme.HealthAppTheme
 
 
+class AppointmentFormActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            AppointmentForm()
+        }
+    }
+}
 @Preview
 @Composable
 fun AppointmentForm() {
