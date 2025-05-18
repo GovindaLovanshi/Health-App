@@ -66,7 +66,7 @@ fun SplashScreen(navHostController: NavHostController) {
 
         Spacer(modifier = Modifier.height(330.dp))
         Image(
-           painter = painterResource(id = R.drawable.fav_icon),
+           painter = painterResource(id = R.drawable.neurosurgeon),
             contentDescription = null,
             modifier = Modifier
                 .clip(CircleShape).width(150.dp).height(150.dp)

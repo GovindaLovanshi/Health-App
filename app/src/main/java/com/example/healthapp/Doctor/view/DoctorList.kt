@@ -68,7 +68,7 @@ fun DoctorList(navHostController: NavHostController) {
                 modifier = Modifier.size(65.dp),
                 contentColor = Color.White,
             ) {
-                Icon(painter = painterResource(id = R.drawable.btn_1), contentDescription = null)
+                Icon(painter = painterResource(id = R.drawable.add), contentDescription = null)
             }
         },
         topBar = {
@@ -190,10 +190,7 @@ fun TopBarDoctor (){
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(painter = painterResource(R.drawable.back),
-                contentDescription = null,
-                modifier = Modifier
-                    .clickable { })
+
 
             Text(
                 text = " Doctor,s List",

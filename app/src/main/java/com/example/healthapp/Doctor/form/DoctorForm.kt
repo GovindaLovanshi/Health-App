@@ -113,7 +113,7 @@ fun DoctorForm(navHostController: NavHostController) {
                     viewModel.addDoctor(doctor, imageUri,
                         onSuccess = {
                             Toast.makeText(context, "Doctor added successfully", Toast.LENGTH_SHORT).show()
-                            navHostController.popBackStack()
+                            navHostController.navigate(Routes.DoctorList)
                         },
                         onError = {
                             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()

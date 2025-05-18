@@ -76,7 +76,7 @@ fun DonaterList(navHostController: NavHostController) {
                 contentColor = Color.White,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.btn_1),
+                    painter = painterResource(id = R.drawable.add),
                     contentDescription = null,
                     modifier = Modifier.size(28.dp)
                 )
@@ -198,7 +198,7 @@ fun DonorItem(
                 }
 
                 Image(
-                    painter = painterResource(R.drawable.bluecall),
+                    painter = painterResource(R.drawable.phone),
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
                         .clickable {

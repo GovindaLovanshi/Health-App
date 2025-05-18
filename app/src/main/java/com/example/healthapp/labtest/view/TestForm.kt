@@ -1,4 +1,4 @@
-package com.example.healthapp.appointment.form
+package com.example.healthapp.labtest.view
 
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -60,32 +60,32 @@ import androidx.navigation.NavHostController
 import com.example.healthapp.Naviagtion.Routes
 import com.example.healthapp.appointment.model.Appointment
 import com.example.healthapp.appointment.viewmodel.AppointmentViewModel
+import com.example.healthapp.labtest.model.LabTest
+import com.example.healthapp.labtest.viewmodel.LabTestViewModel
 import com.example.healthapp.ui.theme.HealthAppTheme
 
 
-class AppointmentFormActivity : ComponentActivity() {
+class LabTestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppointmentForm()
+            TestForm()
         }
     }
 }
 @Preview
 @Composable
-fun AppointmentForm() {
+fun TestForm() {
 
     val context = LocalContext.current
-    val viewModel: AppointmentViewModel = viewModel()
+    val viewModel: LabTestViewModel = viewModel()
 
 
-    var name by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") }
+    var facility by remember { mutableStateOf("") }
+    var testNo by remember { mutableStateOf("") }
     var mobile by remember { mutableStateOf("") }
+    var time by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
-    var injury by remember { mutableStateOf("") }
-    var starttime by remember { mutableStateOf("") }
-    var endtime by remember { mutableStateOf("") }
 
 
 
@@ -125,8 +125,8 @@ fun AppointmentForm() {
 
                 TextField(
                     modifier = Modifier.width(350.dp),
-                    value = name,
-                    onValueChange = { name = it },
+                    value = facility,
+                    onValueChange = { facility = it },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White,
                         focusedContainerColor = Color.White,
@@ -135,7 +135,7 @@ fun AppointmentForm() {
                         cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
                         unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
                     ),
-                    placeholder = { Text(text = "Name Of Patient") }
+                    placeholder = { Text(text = "Test Details") }
 
                 )
 
@@ -147,10 +147,10 @@ fun AppointmentForm() {
 
                     TextField(
                         modifier = Modifier.width(170.dp),
-                        value = starttime,
+                        value = testNo,
 
 
-                        onValueChange = { starttime = it },
+                        onValueChange = { testNo = it },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
@@ -159,7 +159,7 @@ fun AppointmentForm() {
                             cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
                             unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
                         ),
-                        placeholder = { Text(text = "Start Time") }
+                        placeholder = { Text(text = "Number Of test") }
 
                     )
 
@@ -167,8 +167,8 @@ fun AppointmentForm() {
 
                     TextField(
                         modifier = Modifier.width(170.dp),
-                        value = endtime,
-                        onValueChange = { endtime = it },
+                        value = mobile,
+                        onValueChange = { mobile = it },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
@@ -177,7 +177,7 @@ fun AppointmentForm() {
                             cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
                             unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
                         ),
-                        placeholder = { Text(text = "End Time") }
+                        placeholder = { Text(text = "mobile Number") }
 
                     )
 
@@ -235,8 +235,8 @@ fun AppointmentForm() {
 
                     TextField(
                         modifier = Modifier.width(170.dp),
-                        value = mobile,
-                        onValueChange = { mobile = it },
+                        value = time,
+                        onValueChange = { time = it },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
@@ -245,7 +245,7 @@ fun AppointmentForm() {
                             cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
                             unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
                         ),
-                        placeholder = { Text(text = "Mobile Number") }
+                        placeholder = { Text(text = "time in Hour") }
 
                     )
 
@@ -256,47 +256,6 @@ fun AppointmentForm() {
 
 
 
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-
-
-                    TextField(
-                        modifier = Modifier.width(170.dp),
-                        value = injury,
-
-
-                        onValueChange = { injury = it },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                        ),
-                        placeholder = { Text(text = "About Injury") }
-
-                    )
-
-                    Spacer(modifier = Modifier.padding())
-
-                    TextField(
-                        modifier = Modifier.width(170.dp),
-                        value = date,
-                        onValueChange = { date = it },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            cursorColor = Color(android.graphics.Color.parseColor("#5e5e5e")),
-                            unfocusedLabelColor = Color(android.graphics.Color.parseColor("#5e5e5e"))
-                        ),
-                        placeholder = { Text(text = "Date Of Appointment") }
-
-                    )
-
-
-                }
 
 
 
@@ -307,18 +266,16 @@ fun AppointmentForm() {
                 Button(
                     modifier = Modifier.width(250.dp),
                     onClick = {
-                        if (name.isNotBlank() && mobile.isNotBlank()) {
-                            val appointment = Appointment(
-                                name = name,
-                                startTime = starttime,
-                                endTime = endtime,
+                        if (facility.isNotBlank() && mobile.isNotBlank() && time.isNotBlank() && address.isNotBlank() &&testNo.isNotBlank()) {
+                            val test = LabTest(
+                                facility = facility,
+                                testNo = testNo,
                                 address = address,
                                 mobile = mobile,
-                                injury = injury,
-                                date = date
+                                time = time
                             )
-                            viewModel.addAppointment(appointment)
-                            Toast.makeText(context, "Appointment Added", Toast.LENGTH_SHORT).show()
+                            viewModel.addAppointment(test)
+                            Toast.makeText(context, "LabTest Added", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(context, "Please fill all required fields", Toast.LENGTH_SHORT).show()
                         }

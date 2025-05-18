@@ -203,7 +203,7 @@ fun BloodForm(navHostController: NavHostController) {
                         viewModel.addDonor(donor, imageUri,
                             onSuccess = {
                                 Toast.makeText(context, "Doctor added successfully", Toast.LENGTH_SHORT).show()
-                                navHostController.popBackStack()
+                                navHostController.navigate(Routes.DonaterList)
                             },
                             onError = {
                                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
@@ -245,11 +245,7 @@ fun TopBarBloodForm() {
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(R.drawable.back),
-                contentDescription = null,
-                modifier = Modifier
-                    .clickable { })
+
 
             Text(
                 text = " Blood Form",
